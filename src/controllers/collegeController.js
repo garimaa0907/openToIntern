@@ -1,4 +1,6 @@
 const collegeModel = require('../models/collegeModel');
+const {validLogo,nameInLowewrCase,validName}=require('../validator/validation')
+
 
 const createCollege = async function(req,res){
     try{
@@ -23,17 +25,17 @@ const createCollege = async function(req,res){
          }
        
          //checking name or fullName in alphabet only
-         if(!(/^[a-z]+(([',. -][a-z ])?[a-z])$/.test(name))){
+         if(!nameInLowewrCase(name)){
             return res.status(400).send({status:false,message:"Name should be in alphabat type /or/ name should be in LowerCase "})
          }
-         if(!(/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z])$/.test(fullName))){
+         if(!validName(fullName)){
             return res.status(400).send({status:false,message:"fullName should be in alphabat type"})
              
          }
           
         //checking logo format
 
-        if(!(/^https?:\/\/(.+\/)+.+(\.(gif|png|jpg|jpeg|webp|svg|psd|bmp|tif|jfif))$/i.test(logoLink))){
+        if(!validLogo(logoLink)){
             return res.status(400).send({status:false,message:"Logolink is not in correct format"})
         }
 
