@@ -1,4 +1,6 @@
+const { connections } = require('mongoose');
 const collegeModel = require('../models/collegeModel');
+const internModel = require('../models/internModel')
 const {validLogo,nameInLowewrCase,validName}=require('../validator/validation')
 
 
@@ -10,6 +12,8 @@ const createCollege = async function(req,res){
          if(Object.keys(data).length == 0){
             return res.status(400).send({status:false,message:"Please Provide Some Data"})
          }
+
+         
 
          const { name, fullName, logoLink } = data
 
@@ -60,4 +64,48 @@ const createCollege = async function(req,res){
         return res.status(500).send({status:false,message:err.message})
     }
 }
+
+
+const getCollegeDetail = async function(req,res){
+   try{
+
+       const collegeName = req.query.collegeName
+
+       if(!collegeName){
+         return res.status(400).send({status:false,message:"College Name is required in query "})
+       }
+       if(!validName(collegeName)){
+         return res.status(400).send({status:false,message:"College Name should be in alphabat type"})  
+       }
+
+       //finding the college
+      const findCollege = await collegeModel.findOne({name:collegeName,isDeleted:false}).select({ name: 1, fullName: 1, logoLink: 1 })
+      if(!findCollege){
+         return res.status(404).send({status:false,message:"College not found"})
+      }
+
+      //finding Interns
+
+      const findIntern = await internModel.findOne({collegeId:findCollege._id,isDeleted:false}).select({ name: 1, email: 1, mobile: 1 })
+      if(!findIntern){
+         return res.status(404).send({status:false,message:"Intern not found"})
+
+      }
+
+      return res.status(200).send({
+         status:true,
+         data:{
+           name:findCollege.name,
+           fullName:findCollege.fullName,
+           logoLink:findCollege.logoLink ,
+           interns:findIntern
+         }
+      })
+   }
+   catch(err){
+      return res.status(500).send({status:false,message:err.message})
+  }
+}
+
 module.exports.createCollege = createCollege
+module.exports.getCollegeDetail = getCollegeDetail
