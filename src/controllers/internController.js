@@ -5,11 +5,12 @@ const { isEmpty, validEmail, validName, validMobile, } = require("../validator/v
 const createIntern = async function (req, res) {
   try {
     const data=req.body
-    const { name, email, mobile, collegeName } = data;
-    const collegeLowerCase = collegeName.toLowerCase();
     if (Object.keys(data).length == 0)
-      return res.status(400).send({ status: false, message: "No data given for creation" });
+    return res.status(400).send({ status: false, message: "No data given for creation" });
 
+    const { name, email, mobile, collegeName } = data;
+  
+   
     if (!name)
       return res.status(400).send({ status: false, message: "Name is required" });
     if (!isEmpty(name))
@@ -39,6 +40,8 @@ const createIntern = async function (req, res) {
       return res.status(400).send({ status: false, message: "College Name is required" });
     if (!isEmpty(collegeName))
       return res.status(400).send({ status: false, message: "College Name can't be empty" })
+
+      const collegeLowerCase = collegeName.toLowerCase();
     
     const college = await collegeModel.findOne({ $or: [{ name: collegeLowerCase }, { fullName: collegeName }], isDeleted: false, }).select({ _id: 1 });
     if (!college)

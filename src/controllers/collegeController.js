@@ -79,7 +79,7 @@ const getCollegeDetail = async function (req, res) {
    try {
 
       const collegeName = req.query.collegeName
-      const collegeLowerCase = collegeName.toLowerCase();
+      
 
       if (!collegeName) {
          return res.status(400).send({ status: false, message: "College Name is required in query " })
@@ -87,7 +87,8 @@ const getCollegeDetail = async function (req, res) {
       if (!validName(collegeName)) {
          return res.status(400).send({ status: false, message: "College Name should be in alphabet type" })
       }
-
+      const collegeLowerCase = collegeName.toLowerCase();
+      
       //finding the college
       const findCollege = await collegeModel.findOne({ $or: [{ name: collegeLowerCase },{ fullName: collegeName }], isDeleted: false }).select({ name: 1, fullName: 1, logoLink: 1 })
       if (!findCollege) {
