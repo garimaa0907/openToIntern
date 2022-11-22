@@ -1,5 +1,5 @@
 const collegeModel = require('../models/collegeModel');
-const {validLogo,nameInLowewrCase,validName}=require('../validator/validation')
+const {validLogo, nameInLowerCase,  validName}=require('../validator/validation')
 
 
 const createCollege = async function(req,res){
@@ -25,7 +25,7 @@ const createCollege = async function(req,res){
          }
        
          //checking name or fullName in alphabet only
-         if(!nameInLowewrCase(name)){
+         if(!nameInLowerCase(name)){
             return res.status(400).send({status:false,message:"Name should be in alphabat type /or/ name should be in LowerCase "})
          }
          if(!validName(fullName)){
