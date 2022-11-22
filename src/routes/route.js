@@ -11,7 +11,8 @@ router.post('/functionup/interns', internController.createIntern)
 
 router.get('/functionup/collegeDetails',collegeController.getCollegeDetail)
 
-router.all('/*',function(req,res){
+router.all('/*',function(req,res)
+{
     res.status(400).send({message:"invalid http request"})
 })
 module.exports=router
