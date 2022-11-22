@@ -1,3 +1,9 @@
+const isValid = function(value){
+    if(typeof value ==='undefined' || value ===null)  return false
+    if(typeof value ==='string' && value.trim().length ===0)return false
+    return true
+}
+
 const validEmail=function(email){
     const emailRegex=/\S+@\S+\.\S+/
     return emailRegex.test(email)
@@ -21,5 +27,5 @@ const nameInLowerCase = function(name){
     return lowerCaseName.test(name)
 }
 
-module.exports={ validEmail, validName, validMobile,validLogo, nameInLowerCase}
+module.exports={isValid, validEmail, validName, validMobile,validLogo,nameInLowerCase}
 
