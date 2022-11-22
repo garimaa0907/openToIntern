@@ -1,29 +1,30 @@
 const internModel = require("../models/internModel");
 const collegeModel = require("../models/collegeModel");
-const { isValid, validEmail, validName, validMobile, } = require("../validator/validation");
+const { isEmpty, validEmail, validName, validMobile, } = require("../validator/validation");
 
 const createIntern = async function (req, res) {
   try {
     const data=req.body
     const { name, email, mobile, collegeName } = data;
+    const collegeLowerCase = collegeName.toLowerCase();
     if (Object.keys(data).length == 0)
       return res.status(400).send({ status: false, message: "No data given for creation" });
 
     if (!name)
       return res.status(400).send({ status: false, message: "Name is required" });
-    if (!isValid(name))
+    if (!isEmpty(name))
       return res.status(400).send({ status: false, message: "Name can't be empty" })
     if (!validName(name))
       return res.status(400).send({ status: false, message: "Name can only take alphabets" });
     if (!email)
       return res.status(400).send({ status: false, message: "Email is required" });
-    if (!isValid(email))
+    if (!isEmpty(email))
       return res.status(400).send({ status: false, message: "Email can't be empty" })
     if (!validEmail(email))
       return res.status(400).send({ status: false, message: "Invalid Email" });
     if (!mobile)
       return res.status(400).send({ status: false, message: "Mobile is required" });
-    if (!isValid(mobile))
+    if (!isEmpty(mobile))
       return res.status(400).send({ status: false, message: "Mobile can't be empty" })
     if (!validMobile(mobile))
       return res.status(400).send({ status: false, message: "Invalid Mobile" });
@@ -36,10 +37,10 @@ const createIntern = async function (req, res) {
 
     if (!collegeName)
       return res.status(400).send({ status: false, message: "College Name is required" });
-    if (!isValid(collegeName))
+    if (!isEmpty(collegeName))
       return res.status(400).send({ status: false, message: "College Name can't be empty" })
     
-    const college = await collegeModel.findOne({ $or: [{ name: collegeName }, { fullName: collegeName }], isDeleted: false, }).select({ _id: 1 });
+    const college = await collegeModel.findOne({ $or: [{ name: collegeLowerCase }, { fullName: collegeName }], isDeleted: false, }).select({ _id: 1 });
     if (!college)
       return res.status(400).send({ status: false, message: "College does not exist" });
          //delete req.body["collegeName"];

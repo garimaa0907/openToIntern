@@ -1,6 +1,6 @@
 const collegeModel = require('../models/collegeModel');
 const internModel = require('../models/internModel')
-const {isValid, validLogo, validName } = require('../validator/validation')
+const { isEmpty, validLogo, validName } = require('../validator/validation')
 
 
 const createCollege = async function (req, res) {
@@ -16,19 +16,19 @@ const createCollege = async function (req, res) {
       if (!name) {
          return res.status(400).send({ status: false, message: "Please provide name" })
       }
-      if (!isValid(name)){ 
+      if (!isEmpty(name)){ 
       return res.status(400).send({ status: false, message: "Name can't be empty" })
       }
       if (!fullName) {
          return res.status(400).send({ status: false, message: "Please provide fullName" })
       }
-      if (!isValid(fullName)){ 
+      if (!isEmpty(fullName)){ 
       return res.status(400).send({ status: false, message: "Full Name can't be empty" })
       }
       if (!logoLink) {
          return res.status(400).send({ status: false, message: "Please Provide logoLink" })
       }
-      if (!isValid(logoLink)){ 
+      if (!isEmpty(logoLink)){ 
          return res.status(400).send({ status: false, message: "Logo Link can't be empty" })
       }
 
@@ -58,8 +58,14 @@ const createCollege = async function (req, res) {
          return res.status(400).send({ status: false, message: "Name should be unique" });
       }
       else {
-         const college = await collegeModel.create(data);
-         return res.status(201).send({ status: true, data: college })
+
+         const college = await collegeModel.create({
+            name:data.name.toLowerCase(),
+            fullName:data.fullName,
+            logoLink:data.logoLink,
+            isDeleted:data.isDeleted
+        });
+         return res.status(201).send({status: true,data:college  })
       }
    }
    catch (err) {
@@ -72,6 +78,7 @@ const getCollegeDetail = async function (req, res) {
    try {
 
       const collegeName = req.query.collegeName
+      const collegeLowerCase = collegeName.toLowerCase();
 
       if (!collegeName) {
          return res.status(400).send({ status: false, message: "College Name is required in query " })
@@ -81,7 +88,7 @@ const getCollegeDetail = async function (req, res) {
       }
 
       //finding the college
-      const findCollege = await collegeModel.findOne({ name: collegeName, isDeleted: false }).select({ name: 1, fullName: 1, logoLink: 1 })
+      const findCollege = await collegeModel.findOne({ $or: [{ name: collegeLowerCase }, { fullName: collegeName }], isDeleted: false }).select({ name: 1, fullName: 1, logoLink: 1 })
       if (!findCollege) {
          return res.status(404).send({ status: false, message: "College not found" })
       }
