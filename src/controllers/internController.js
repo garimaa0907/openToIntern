@@ -42,7 +42,7 @@ const createIntern = async function (req, res) {
     const college = await collegeModel.findOne({ $or: [{ name: collegeName }, { fullName: collegeName }], isDeleted: false, }).select({ _id: 1 });
     if (!college)
       return res.status(400).send({ status: false, message: "College does not exist" });
-    //delete req.body["collegeName"];
+         //delete req.body["collegeName"];
     data.collegeId = college._id;
 
     const internCreated = await internModel.create(data);
@@ -52,4 +52,5 @@ const createIntern = async function (req, res) {
   }
 };
 
-module.exports.createIntern = createIntern;
+module.exports.createIntern = createIntern;     
+
