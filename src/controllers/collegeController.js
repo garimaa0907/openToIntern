@@ -11,6 +11,7 @@ const createCollege = async function (req, res) {
       }
 
       const { name, fullName, logoLink } = data
+      const nameInLowerCase = data.name.toLowerCase()
 
       //checking required field is mandatory
       if (!name) {
@@ -53,14 +54,14 @@ const createCollege = async function (req, res) {
       }
 
       // checking name unique
-      const findname = await collegeModel.findOne({ name: data.name })
+      const findname = await collegeModel.findOne({ name: nameInLowerCase })
       if (findname) {
          return res.status(400).send({ status: false, message: "Name should be unique" });
       }
       else {
 
          const college = await collegeModel.create({
-            name:data.name.toLowerCase(),
+            name:nameInLowerCase,
             fullName:data.fullName,
             logoLink:data.logoLink,
             isDeleted:data.isDeleted
@@ -88,7 +89,7 @@ const getCollegeDetail = async function (req, res) {
       }
 
       //finding the college
-      const findCollege = await collegeModel.findOne({ $or: [{ name: collegeLowerCase }, { fullName: collegeName }], isDeleted: false }).select({ name: 1, fullName: 1, logoLink: 1 })
+      const findCollege = await collegeModel.findOne({ $or: [{ name: collegeLowerCase },{ fullName: collegeName }], isDeleted: false }).select({ name: 1, fullName: 1, logoLink: 1 })
       if (!findCollege) {
          return res.status(404).send({ status: false, message: "College not found" })
       }
