@@ -4,7 +4,8 @@
   "description": "internship project ",
   "main": "index.js",
   "scripts": {
-    "test": "error/server error"
+    "test": "error/server error",
+    "start": "node src/index.js"
   },
   "repository": {
     "type": "git",
