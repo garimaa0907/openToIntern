@@ -20,12 +20,13 @@ const createCollege = async function (req, res) {
       if (!isEmpty(name)){ 
       return res.status(400).send({ status: false, message: "Name can't be empty" })
       }
+
       if (!fullName) {
          return res.status(400).send({ status: false, message: "Please provide fullName" })
       }
       if (!isEmpty(fullName)){ 
       return res.status(400).send({ status: false, message: "Full Name can't be empty" })
-      }
+    }
       if (!logoLink) {
          return res.status(400).send({ status: false, message: "Please Provide logoLink" })
       }
