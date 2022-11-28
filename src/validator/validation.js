@@ -5,8 +5,8 @@ const isEmpty = function(value){
 }
 
 const validEmail=function(email){
-    const emailRegex=/\S+@\S+\.\S+/
-    return emailRegex.test(email)
+    const emailRegex= /^[\w-\.]+@([\w-]+\.)+[\w-][a-z]{1,4}$/
+  return emailRegex.test(email)
 }
 
 const validName=function(name){
